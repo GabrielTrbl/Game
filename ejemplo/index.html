@@ -1,0 +1,92 @@
+Copy code
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="400" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        
+        const notes = [];
+        const player = {
+            x: canvas.width / 2,
+            y: canvas.height - 30,
+            width: 20,
+            height: 20
+        };
+        
+        function spawnNote() {
+            const note = {
+                x: Math.random() * canvas.width,
+                y: 0,
+                width: 10,
+                height: 10,
+                speed: Math.random() * 3 + 1 // Velocidad aleatoria
+            };
+            notes.push(note);
+        }
+        
+        function drawPlayer() {
+            ctx.fillStyle = "blue";
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+        }
+        
+        function drawNotes() {
+            ctx.fillStyle = "red";
+            notes.forEach(note => {
+                ctx.fillRect(note.x, note.y, note.width, note.height);
+            });
+        }
+        
+        function moveNotes() {
+            notes.forEach(note => {
+                note.y += note.speed;
+                
+                // Verificar si el jugador atrapa la nota
+                if (
+                    note.x < player.x + player.width &&
+                    note.x + note.width > player.x &&
+                    note.y + note.height > player.y &&
+                    note.y < player.y + player.height
+                ) {
+                    // El jugador atrapó la nota
+                    notes.splice(notes.indexOf(note), 1);
+                }
+                
+                // Eliminar notas fuera del lienzo
+                if (note.y > canvas.height) {
+                    notes.splice(notes.indexOf(note), 1);
+                }
+            });
+        }
+        
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            spawnNote();
+            moveNotes();
+            drawPlayer();
+            drawNotes();
+            requestAnimationFrame(gameLoop);
+        }
+        
+        gameLoop();
+        
+        // Control del jugador
+        window.addEventListener("keydown", function (event) {
+            if (event.key === "ArrowLeft" && player.x > 0) {
+                player.x -= 10;
+            }
+            if (event.key === "ArrowRight" && player.x + player.width < canvas.width) {
+                player.x += 10;
+            }
+        });
+    </script>
+</body>
+</html>
