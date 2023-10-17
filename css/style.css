@@ -1,42 +1,62 @@
 body {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     width: 100vw;
     margin: 0;
 }
 
-@media screen and (max-width: 768px) {
-    /* Estilos específicos para pantallas pequeñas */
+@media screen and (max-width: 768px) { 
     body {
         width: 100%;
         height: 100%;
     }
     
     section {
-        width: 100%; /* Ocupar todo el ancho disponible */
+        width: 100%;  
     }
-    #izquierda, #derecha {
-        display: none; /* Ocultar elementos laterales */
+    #canvas-game {
+        border: 5px solid black;
+        border-radius: 1em;
+        max-width: 90%;
+        height: 80%;
+        margin: 10px 0; /* Ajusta el margen superior e inferior según sea necesario */
     }
+}
+
+@media screen  and (max-height: 700px){
+    body {
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+    }
+    
+    section {
+        width: 100%;  
+    }
+    #canvas-game {
+        border: 5px solid black;
+        border-radius: 1em;
+        max-width: 100%;
+        height: 100vh;
+        margin: 10px auto; /* Ajusta el margen superior e inferior según sea necesario */
+    }
+    
 }
 
 section {
     width: 100%;
+    height: 75%;
     text-align: center;
 }
 #canvas-game {
     border: 5px solid black;
-    margin: 0 auto;
     border-radius: 1em;
-    width: 50%;
-    height: 75%;
+    max-width: 90%;
+    height: 80%;
+    margin: 10px 0; /* Ajusta el margen superior e inferior según sea necesario */
 }
-#izquierda {
- width: 25%;
- 
-}
-#derecha{
-width: 25%;
+#Botones {
+ width: 100%;
 }
 button {
     padding: 7px;
@@ -45,3 +65,4 @@ button {
     border-radius: 6px;
     cursor: pointer;
 }
+

@@ -8,7 +8,9 @@ let gameOver = 0
 
 let menu = 2
 
-let state = run
+let preRun = 4
+
+let state = menu
 
 let isGameOver = false;
 
@@ -21,6 +23,10 @@ let currentDifficulty = 1;
 let score = 0;
 
 let gameOver1 = 0
+
+let isStartButtonDisabled = false;
+let isRestartButtonDisabled = true;
+let isMenuButtonDisabled = true;
 
 const notes = [] ;      // arreglo que contiene las notas
 
@@ -40,11 +46,18 @@ const noteImages = [        // lista de imagenes
     "img/Nota3.png" ,
     "img/Nota4.png" ,
     "img/Nota5.png" , 
+    "img/Nota6.png" ,
+    "img/Nota7.png"
 ];
 const noteSounds = {        // lista de sonidos y su nota correspondiente
-   "img/Nota1.png":  new Audio("sounds/Nota1.mp3") ,
-    "img/Nota2.png": new Audio ("sounds/Nota2.mp3") ,
-    "img/Nota3.png": new Audio ("sounds/Nota3.mp3") ,
+   "img/Nota1.png":  new Audio("sounds/Do.mp3") ,
+    "img/Nota2.png": new Audio ("sounds/Fa.mp3") ,
+    "img/Nota3.png": new Audio ("sounds/La.mp3") ,
+    "img/Nota4.png": new Audio ("sounds/Mi.mp3") ,
+    "img/Nota5.png": new Audio ("sounds/Re.mp3") ,
+    "img/Nota6.png": new Audio ("sounds/Si.mp3") ,
+    "img/Nota7.png": new Audio ("sounds/Sol.mp3") ,
+
 };
 
 function drawGameOverScreen(ctx){   // dibuja Game Over en la pantalla
@@ -52,6 +65,14 @@ function drawGameOverScreen(ctx){   // dibuja Game Over en la pantalla
     ctx.fillStyle = "red";
     ctx.fillText("Game Over",125,300);
 }
+
+function drawMenuScreen(ctx){
+    ctx.font = "50px Arial";
+    ctx.fillStyle = "#6F0606";
+    ctx.fillText("Atrapa la musica",65,180)
+    ctx.fillText("Press Start",130,300)
+}
+
 
 function  drawbackground() {       // limpia el canvas
     ctx.fillStyle = "White";
@@ -153,17 +174,44 @@ const restart = document.getElementById("restart");
 
 restart.addEventListener("click",restartGame);
 
+const Menu = document.getElementById("menu");
+
+Menu.addEventListener("click",menuGame);
+
+const start = document.getElementById("start")
+
+start.addEventListener("click",startGame)
+
 function restartGame(){         //La funcion se activa con el boton y reinicia las estadisticas a su estado inicial
-    // isGameOver = false;
-    // isGamePaused = false;
-    state = menu;
-    // score = 0;
-    // currentDifficulty = 1;
-    // gameTime = 0;
-    // notes.splice(0);
-    // player.x = 250
-    // player.y = 550
-    //requestAnimationFrame(updateGameArea);
+    state = preRun;
+    isRestartButtonDisabled = true;
+    isStartButtonDisabled = false;
+    isMenuButtonDisabled = false;
+
+    restart.disabled = isRestartButtonDisabled;
+    start.disabled = isStartButtonDisabled;
+    Menu.disabled = isMenuButtonDisabled;
+
+}
+function menuGame(){
+    state = menu
+    isRestartButtonDisabled = true;
+    isStartButtonDisabled = false;
+    isMenuButtonDisabled = true;
+
+    restart.disabled = isRestartButtonDisabled;
+    start.disabled = isStartButtonDisabled;
+    Menu.disabled = isMenuButtonDisabled;
+}
+function startGame(){
+    state = preRun; 
+    isRestartButtonDisabled = false;
+    isStartButtonDisabled = true;
+    isMenuButtonDisabled = false;
+
+    restart.disabled = isRestartButtonDisabled;
+    start.disabled = isStartButtonDisabled;
+    Menu.disabled = isMenuButtonDisabled;
 }
 
 function checkGameOver(notes,canvas){   // chequea cuando el juego debe entrar en Game Over.
@@ -174,6 +222,9 @@ function checkGameOver(notes,canvas){   // chequea cuando el juego debe entrar e
         isGameOver = true;
         isGamePaused = true;
         state= gameOver;
+        restart.disabled = false; 
+        start.disabled = true;    
+        Menu.disabled = false;    
     }
         
 
@@ -184,6 +235,10 @@ function updateGameArea(){              // genera el bucle que hace funcionar al
     switch(state){
         case run : 
             if ((isGameOver == false) && (isGamePaused == false)){
+                restart.disabled = false; 
+                start.disabled = true;    
+                Menu.disabled = false; 
+                
                 drawplayer();
                 movePlayerPosition(player);
                 drawNotes(notes, ctx);
@@ -198,6 +253,7 @@ function updateGameArea(){              // genera el bucle que hace funcionar al
         case gameOver :
             if ((isGameOver == true) && (isGamePaused == true)){
             if ((gameOver1 == 0)) {
+            drawbackground();
             drawGameOverScreen(ctx);
             drawScore();
             gameOver1 += 1;
@@ -208,22 +264,42 @@ function updateGameArea(){              // genera el bucle que hace funcionar al
             }
         }
             break;
-      case menu :
-        gameOver1 = 0
-        isGameOver = false;
-        isGamePaused = false;
-        state = run;
-        score = 0;
-        currentDifficulty = 1;
-        gameTime = 0;
-        notes.splice(0);
-        player.x = 250;
-        player.y = 550;
-        requestAnimationFrame(updateGameArea);  
-        break;
+        case preRun :
+            // isStartButtonDisabled = false;
+            // isMenuButtonDisabled = true;
+            new_Inicio();
+            break;
+        case menu :
+            restart.disabled = isRestartButtonDisabled;
+            start.disabled = isStartButtonDisabled;
+            Menu.disabled = isMenuButtonDisabled;
+            isRestartButtonDisabled = true;
+            isStartButtonDisabled = false;
+            isMenuButtonDisabled = true;
+            drawbackground();
+            drawMenuScreen(ctx);
+            requestAnimationFrame(updateGameArea);
+            break;
     }
     }       
 
 updateGameArea();
+
+function new_Inicio() {
+    gameOver1 = 0
+    isGameOver = false;
+    isGamePaused = false;
+    state = run;
+    score = 0;
+    currentDifficulty = 1;
+    gameTime = 0;
+    notes.splice(0);
+    player.x = 250;
+    player.y = 550;
+    requestAnimationFrame(updateGameArea);  
+};
+
+
+
 
 export {currentDifficulty,maxDifficulty,gameTime,spawnNote}
