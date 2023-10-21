@@ -2,15 +2,15 @@ import { Player } from "./player.js";
 import { movePlayerPosition } from "./controls.js";
 import { Notes } from "./notes.js";
 
-let run = 1     // variables iniciales del juego
+let run = 1;     // variables iniciales del juego
 
-let gameOver = 0
+let gameOver = 0;
 
-let menu = 2
+let menu = 2;
 
-let preRun = 4
+let preRun = 4;
 
-let state = menu
+let state = menu;
 
 let isGameOver = false;
 
@@ -22,7 +22,7 @@ let currentDifficulty = 1;
 
 let score = 0;
 
-let gameOver1 = 0
+let gameOver1 = 0;
 
 let isStartButtonDisabled = false;
 let isRestartButtonDisabled = true;
@@ -30,8 +30,8 @@ let isMenuButtonDisabled = true;
 
 const notes = [] ;      // arreglo que contiene las notas
 
-const canvas = document.getElementById("canvas-game");  //dibujo del canvas y sus parametros
-const ctx = canvas.getContext("2d");
+export const canvas = document.getElementById("canvas-game");  //dibujo del canvas y sus parametros
+export const ctx = canvas.getContext("2d");
 canvas.height = 600 ;
 canvas.width = 500 ;
 
@@ -64,21 +64,20 @@ function drawGameOverScreen(ctx){   // dibuja Game Over en la pantalla
     ctx.font = "50px Arial";
     ctx.fillStyle = "red";
     ctx.fillText("Game Over",125,300);
-}
+};
 
-function drawMenuScreen(ctx){
+function drawMenuScreen(ctx){       // dibuja la pantalla de menu
     ctx.font = "50px Arial";
     ctx.fillStyle = "#6F0606";
-    ctx.fillText("Atrapa la musica",65,180)
-    ctx.fillText("Press Start",130,300)
-}
+    ctx.fillText("Atrapa la musica",65,180);
+    ctx.fillText("Press Start",130,300);
+};
 
 
 function  drawbackground() {       // limpia el canvas
     ctx.fillStyle = "White";
-    ctx.fillRect(0, 0, canvas.width, canvas.height)
-    
-}
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+};
 
 function drawplayer(){             // dibuja al jugador, asignandole una imagen.
 
@@ -89,8 +88,8 @@ function drawplayer(){             // dibuja al jugador, asignandole una imagen.
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawbackground();
     ctx.drawImage(playerImg, player.x, player.y, player.width, player.height);
-    }
-}
+    };
+};
 
 function drawNotes(notes, ctx) {        // dibuja las notas.
     for (let i = 0; i < notes.length; i++) {
@@ -102,18 +101,18 @@ function drawNotes(notes, ctx) {        // dibuja las notas.
       ctx.drawImage(noteImg, currentNote.x, currentNote.y, currentNote.width, currentNote.height);           
     };
 }
-}
+};
 
 function drawScore (){          // dibuja el puntaje obtenido
     ctx.font = "24px Arial";
     ctx.fillStyle = "black";
     ctx.fillText("Notas atrapadas: " + score, 10,30);
-}
+};
 
 function spawnNote() {      // genera una nota y la agrega al arreglo
-    const note = new Notes ()
+    const note = new Notes ();
     const randomImageIndex = Math.floor(Math.random( ) * noteImages.length);
-    note.imageSrc = noteImages [randomImageIndex]
+    note.imageSrc = noteImages [randomImageIndex];
         
     note.x = Math.random () * (canvas.width - 20) ;
     note.y = 0;
@@ -121,7 +120,7 @@ function spawnNote() {      // genera una nota y la agrega al arreglo
     note.height = 24;
     note.speed = Math.random () *2 + 1;
     notes.push (note);
-}
+};
 
 function upDifficulty (){   // sube la dificultad, aumentando el limite de notas en pantalla.
     gameTime += 16;
@@ -129,7 +128,7 @@ function upDifficulty (){   // sube la dificultad, aumentando el limite de notas
         if (gameTime >= currentDifficulty * 5000)
         currentDifficulty++;
     }
-    const maxNotes = currentDifficulty * 2
+    const maxNotes = currentDifficulty * 2;
     while(notes.length < maxNotes){
     spawnNote();
     }
@@ -137,12 +136,12 @@ function upDifficulty (){   // sube la dificultad, aumentando el limite de notas
      
 function moventNotes (notes) {      // controla el movimiento de las notas
         for (let i = 0; i < notes.length; i++) {
-        const currentNote = notes[i]
+        const currentNote = notes[i];
         
         currentNote.y += currentNote.speed;
     }
     
-}
+};
 function removeNote() {             // remueve las notas ante una colision con el jugador
     for(let i=0; i < notes.length; i++) {
         const currentNote = notes[i];
@@ -157,15 +156,15 @@ function removeNote() {             // remueve las notas ante una colision con e
         i--;
         score++;
         if(noteSounds[noteImage]){
-            const previusSound = noteSounds[noteImage]
+            const previusSound = noteSounds[noteImage];
             previusSound.pause();
-            previusSound.currentTime = 0
+            previusSound.currentTime = 0;
             noteSounds[noteImage].play();
         }
         }
     
     }
-}
+};
 
 
 // genera el boton de reinicio
@@ -174,13 +173,17 @@ const restart = document.getElementById("restart");
 
 restart.addEventListener("click",restartGame);
 
+//genera el boton de menu
+
 const Menu = document.getElementById("menu");
 
 Menu.addEventListener("click",menuGame);
 
-const start = document.getElementById("start")
+//genera el boton de start
 
-start.addEventListener("click",startGame)
+const start = document.getElementById("start");
+
+start.addEventListener("click",startGame);
 
 function restartGame(){         //La funcion se activa con el boton y reinicia las estadisticas a su estado inicial
     state = preRun;
@@ -192,9 +195,9 @@ function restartGame(){         //La funcion se activa con el boton y reinicia l
     start.disabled = isStartButtonDisabled;
     Menu.disabled = isMenuButtonDisabled;
 
-}
-function menuGame(){
-    state = menu
+};
+function menuGame(){            // La funcion se activa con el boton y lleva al juego al estado de menu
+    state = menu;
     isRestartButtonDisabled = true;
     isStartButtonDisabled = false;
     isMenuButtonDisabled = true;
@@ -202,8 +205,8 @@ function menuGame(){
     restart.disabled = isRestartButtonDisabled;
     start.disabled = isStartButtonDisabled;
     Menu.disabled = isMenuButtonDisabled;
-}
-function startGame(){
+};
+function startGame(){           // La funcion se activa con el boton y lleva al juego al estado start
     state = preRun; 
     isRestartButtonDisabled = false;
     isStartButtonDisabled = true;
@@ -212,13 +215,27 @@ function startGame(){
     restart.disabled = isRestartButtonDisabled;
     start.disabled = isStartButtonDisabled;
     Menu.disabled = isMenuButtonDisabled;
-}
+};
+
+function new_Inicio() {     // Esta funcion se encarga de que los valores se reseteen y trabaja junto con la funcion restart llevando al juego al estado prerun
+    gameOver1 = 0;
+    isGameOver = false;
+    isGamePaused = false;
+    state = run;
+    score = 0;
+    currentDifficulty = 1;
+    gameTime = 0;
+    notes.splice(0);
+    player.x = 250;
+    player.y = 550;
+    requestAnimationFrame(updateGameArea);  
+};
 
 function checkGameOver(notes,canvas){   // chequea cuando el juego debe entrar en Game Over.
     for (let i = 0 ; i < notes.length ; i++){
-    const currentNote = notes[i] 
+    const currentNote = notes[i]; 
     if (currentNote.y > canvas.height) {
-        notes.splice(i,1)
+        notes.splice(i,1);
         isGameOver = true;
         isGamePaused = true;
         state= gameOver;
@@ -229,7 +246,7 @@ function checkGameOver(notes,canvas){   // chequea cuando el juego debe entrar e
         
 
 }
-}
+};
 
 function updateGameArea(){              // genera el bucle que hace funcionar al juego
     switch(state){
@@ -265,8 +282,6 @@ function updateGameArea(){              // genera el bucle que hace funcionar al
         }
             break;
         case preRun :
-            // isStartButtonDisabled = false;
-            // isMenuButtonDisabled = true;
             new_Inicio();
             break;
         case menu :
@@ -281,25 +296,8 @@ function updateGameArea(){              // genera el bucle que hace funcionar al
             requestAnimationFrame(updateGameArea);
             break;
     }
-    }       
+};       
 
 updateGameArea();
 
-function new_Inicio() {
-    gameOver1 = 0
-    isGameOver = false;
-    isGamePaused = false;
-    state = run;
-    score = 0;
-    currentDifficulty = 1;
-    gameTime = 0;
-    notes.splice(0);
-    player.x = 250;
-    player.y = 550;
-    requestAnimationFrame(updateGameArea);  
-};
-
-
-
-
-export {currentDifficulty,maxDifficulty,gameTime,spawnNote}
+export {currentDifficulty,maxDifficulty,gameTime,spawnNote};
