@@ -1,4 +1,8 @@
 export const keys = {};
+let limitTop = 0;
+let limitUnder = 0;
+let limitLeft = 0;
+let limitRight = 0
 
 window.addEventListener ("keydown", function(e) {
     keys[e.key] = true;
@@ -7,18 +11,31 @@ window.addEventListener ("keyup", function(e) {
     keys[e.key] = false
 });
 
-export function movePlayerPosition (player) {
-    if (player.x < 0) {
-    player.x = 0;
+export function movePlayerPosition (player,canvas) {
+    // console.log("tamañoAlto"+canvasHeight)
+    // console.log("tamañoAncho"+canvasWidth)
+    limitTop = 0;
+    limitLeft = 0;
+    limitUnder = canvas.height - player.height;
+    limitRight = canvas.width - player.width;
+    // console.log("under" + limitUnder)
+    // console.log("right" + limitRight)
+    // console.log("top" + limitTop)
+    // console.log("left" + limitLeft)
+    // console.log("limite inferior" + limitUnder)
+    // console.log("limite derecho" + limitRight)
+    if (player.x < limitLeft) {
+    player.x = limitLeft;
     }
-    if (player.y < 0) {
-    player.y = 0;
+    if (player.y < limitTop) {
+    player.y = limitTop;
     }
-    if (player.y > 545) {
-        player.y = 545;
+    if (player.y > limitUnder) {
+        console.log("pase por aki")
+        player.y = limitUnder;
     }
-    if (player.x > 425) {
-        player.x = 425;
+    if (player.x > limitRight) {
+        player.x = limitRight;
     }
     if (keys["ArrowLeft"]){
         player.x -= 5;

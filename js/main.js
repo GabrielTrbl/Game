@@ -1,6 +1,8 @@
 import { Player } from "./player.js";
 import { movePlayerPosition } from "./controls.js";
 import { Notes } from "./notes.js";
+import { touchEnd,touchMove,touchStart } from "./controlsTouch.js";
+
 
 let run = 1;     // variables iniciales del juego
 
@@ -28,6 +30,7 @@ let isStartButtonDisabled = false;
 let isRestartButtonDisabled = true;
 let isMenuButtonDisabled = true;
 
+
 const notes = [] ;      // arreglo que contiene las notas
 
 export const canvas = document.getElementById("canvas-game");  //dibujo del canvas y sus parametros
@@ -35,8 +38,21 @@ export const ctx = canvas.getContext("2d");
 canvas.height = 600 ;
 canvas.width = 500 ;
 
+const canvasRect = canvas.getBoundingClientRect(); // Obtén la posición y dimensiones del canvas
+export const canvasLeft = canvasRect.left; // Coordenada X del canvas en la pantalla
+export const canvasTop = canvasRect.top;  // Coordenada Y del canvas en la pantalla
 
-const player = new Player(250, 550, 75, 50);        //creacion de un Player, importando la clase Player
+// console.log(canvasRect.left)
+// console.log(canvasRect.top)
+
+export const canvasWidth = canvasRect.width;  //ancho de dimension del canvas segun el dispositivo
+export const canvasHeight = canvasRect.height;    ///alto de dimension del canvas segun el dispositivo
+
+export let scaleHorizont = (canvas.width/canvasWidth);
+
+export let scaleVertical = (canvas.height/canvasHeight);
+
+export const player = new Player((canvas.width/2) , (canvas.height/2) , 75, 50);        //creacion de un Player, importando la clase Player
 const maxDifficulty = 5;
 
 
@@ -69,8 +85,8 @@ function drawGameOverScreen(ctx){   // dibuja Game Over en la pantalla
 function drawMenuScreen(ctx){       // dibuja la pantalla de menu
     ctx.font = "50px Arial";
     ctx.fillStyle = "#6F0606";
-    ctx.fillText("Atrapa la musica",65,180);
-    ctx.fillText("Press Start",130,300);
+    ctx.fillText("Atrapa la musica",canvas.width * 0.13 ,canvas.height*0.3);
+    ctx.fillText("Press Start",canvas.width * 0.26,canvas.height*0.5);
 };
 
 
@@ -87,7 +103,7 @@ function drawplayer(){             // dibuja al jugador, asignandole una imagen.
     playerImg.onload = function () {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawbackground();
-    ctx.drawImage(playerImg, player.x, player.y, player.width, player.height);
+    ctx.drawImage(playerImg,player.x, player.y, player.width, player.height);
     };
 };
 
@@ -185,6 +201,12 @@ const start = document.getElementById("start");
 
 start.addEventListener("click",startGame);
 
+// const tactilGame = document.getElementById("canvas-game")
+
+canvas.addEventListener("touchstart", (e) => touchStart(e,player),{passive:true});
+canvas.addEventListener("touchmove", (e) => touchMove(e, player,canvas),{passive:true});
+canvas.addEventListener("touchend", touchEnd);
+
 function restartGame(){         //La funcion se activa con el boton y reinicia las estadisticas a su estado inicial
     state = preRun;
     isRestartButtonDisabled = true;
@@ -226,8 +248,8 @@ function new_Inicio() {     // Esta funcion se encarga de que los valores se res
     currentDifficulty = 1;
     gameTime = 0;
     notes.splice(0);
-    player.x = 250;
-    player.y = 550;
+    player.x = (canvas.width/2);
+    player.y = (canvas.height/2);
     requestAnimationFrame(updateGameArea);  
 };
 
@@ -243,8 +265,6 @@ function checkGameOver(notes,canvas){   // chequea cuando el juego debe entrar e
         start.disabled = true;    
         Menu.disabled = false;    
     }
-        
-
 }
 };
 
@@ -255,9 +275,8 @@ function updateGameArea(){              // genera el bucle que hace funcionar al
                 restart.disabled = false; 
                 start.disabled = true;    
                 Menu.disabled = false; 
-                
                 drawplayer();
-                movePlayerPosition(player);
+                movePlayerPosition(player,canvas);
                 drawNotes(notes, ctx);
                 moventNotes (notes);
                 removeNote();
