@@ -1,12 +1,12 @@
 import { canvasLeft,canvasTop,scaleHorizont,scaleVertical } from "./main.js";
 
-let isDragging = false;
+let isDragging = false;     // parametros para funciones de pantalla tactil
 let istouch_X = 0;
 let istouch_Y = 0;
 let realTouchX = 0;
 let realTouchY = 0;
 
-export function touchStart(e,player){
+export function touchStart(e,player){       //Detecta el inicio del evento touch en la pantalla
     const touch = e.touches[0];
     // console.log(canvasLeft)
     // console.log(canvasTop)
@@ -31,7 +31,7 @@ export function touchStart(e,player){
 
 };
 
-export function touchMove(e,player,canvas){
+export function touchMove(e,player,canvas){     // reaciona al movimiento del touch, siempre que este se mantenga pulsado.
     if (isDragging == true) {
     const touch = e.touches[0];    
     const newX = touch.pageX - istouch_X;
@@ -39,18 +39,18 @@ export function touchMove(e,player,canvas){
 
     player.x = Math.max(0,Math.min(newX,canvas.width - player.width));
     player.y = Math.max(0,Math.min(newY,canvas.height - player.height));
-    console.log(player.x + "p");
-    console.log(player.y + "p");
+    // console.log(player.x + "p");
+    // console.log(player.y + "p");
     }
 }
 
-export function touchEnd(){
+export function touchEnd(){             // Detecta el final del evento touch en la pantalla
     isDragging = false;
     console.log(isDragging);
 
 }
 
-function isTouchInPlayer(realTouchX,realTouchY,player){
+function isTouchInPlayer(realTouchX,realTouchY,player){ //Verufica que el jugador haya colocado el touch sobre el jugador
     // console.log("Xplayer"+player.x);
     // console.log("Yplayer"+player.y);
     if ( 

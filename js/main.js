@@ -30,6 +30,7 @@ let isStartButtonDisabled = false;
 let isRestartButtonDisabled = true;
 let isMenuButtonDisabled = true;
 
+const maxDifficulty = 5;
 
 const notes = [] ;      // arreglo que contiene las notas
 
@@ -48,31 +49,30 @@ export const canvasTop = canvasRect.top;  // Coordenada Y del canvas en la panta
 export const canvasWidth = canvasRect.width;  //ancho de dimension del canvas segun el dispositivo
 export const canvasHeight = canvasRect.height;    ///alto de dimension del canvas segun el dispositivo
 
-export let scaleHorizont = (canvas.width/canvasWidth);
+export let scaleHorizont = (canvas.width/canvasWidth);  //escalado de pantalla, en pantallas menores al tamaño del canvas original
 
-export let scaleVertical = (canvas.height/canvasHeight);
+export let scaleVertical = (canvas.height/canvasHeight);    
+
 
 export const player = new Player((canvas.width/2) , (canvas.height/2) , 75, 50);        //creacion de un Player, importando la clase Player
-const maxDifficulty = 5;
-
 
 const noteImages = [        // lista de imagenes
-    "img/Nota1.png" ,
-    "img/Nota2.png" ,
-    "img/Nota3.png" ,
-    "img/Nota4.png" ,
-    "img/Nota5.png" , 
-    "img/Nota6.png" ,
-    "img/Nota7.png"
+    "img/Nota1B.png" ,
+    "img/Nota2B.png" ,
+    "img/Nota3B.png" ,
+    "img/Nota4B.png" ,
+    "img/Nota5B.png" , 
+    "img/Nota6B.png" ,
+    "img/Nota7B.png"
 ];
 const noteSounds = {        // lista de sonidos y su nota correspondiente
-   "img/Nota1.png":  new Audio("sounds/Do.mp3") ,
-    "img/Nota2.png": new Audio ("sounds/Fa.mp3") ,
-    "img/Nota3.png": new Audio ("sounds/La.mp3") ,
-    "img/Nota4.png": new Audio ("sounds/Mi.mp3") ,
-    "img/Nota5.png": new Audio ("sounds/Re.mp3") ,
-    "img/Nota6.png": new Audio ("sounds/Si.mp3") ,
-    "img/Nota7.png": new Audio ("sounds/Sol.mp3") ,
+   "img/Nota1B.png":  new Audio("sounds/Do.mp3") ,
+    "img/Nota2B.png": new Audio ("sounds/Fa.mp3") ,
+    "img/Nota3B.png": new Audio ("sounds/La.mp3") ,
+    "img/Nota4B.png": new Audio ("sounds/Mi.mp3") ,
+    "img/Nota5B.png": new Audio ("sounds/Re.mp3") ,
+    "img/Nota6B.png": new Audio ("sounds/Si.mp3") ,
+    "img/Nota7B.png": new Audio ("sounds/Sol.mp3") ,
 
 };
 
@@ -90,9 +90,12 @@ function drawMenuScreen(ctx){       // dibuja la pantalla de menu
 };
 
 
-function  drawbackground() {       // limpia el canvas
-    ctx.fillStyle = "White";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+function  drawbackground(ctx) {       // limpia el canvas
+    const backgroundImage = new Image()
+    backgroundImage.src = "img/Imagen de fondo.jpg"
+    backgroundImage.onload = function (){
+        ctx.drawImage(backgroundImage,0,0,canvas.width,canvas.height)
+    }
 };
 
 function drawplayer(){             // dibuja al jugador, asignandole una imagen.
@@ -101,9 +104,7 @@ function drawplayer(){             // dibuja al jugador, asignandole una imagen.
     playerImg.src = "img/Player.png";
     
     playerImg.onload = function () {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawbackground();
-    ctx.drawImage(playerImg,player.x, player.y, player.width, player.height);
+        ctx.drawImage(playerImg,player.x, player.y, player.width, player.height);
     };
 };
 
@@ -121,7 +122,7 @@ function drawNotes(notes, ctx) {        // dibuja las notas.
 
 function drawScore (){          // dibuja el puntaje obtenido
     ctx.font = "24px Arial";
-    ctx.fillStyle = "black";
+    ctx.fillStyle = "white";
     ctx.fillText("Notas atrapadas: " + score, 10,30);
 };
 
@@ -201,13 +202,13 @@ const start = document.getElementById("start");
 
 start.addEventListener("click",startGame);
 
-// const tactilGame = document.getElementById("canvas-game")
+//Controladores de los eventos tactiles en pantalla.
 
 canvas.addEventListener("touchstart", (e) => touchStart(e,player),{passive:true});
 canvas.addEventListener("touchmove", (e) => touchMove(e, player,canvas),{passive:true});
 canvas.addEventListener("touchend", touchEnd);
 
-function restartGame(){         //La funcion se activa con el boton y reinicia las estadisticas a su estado inicial
+function restartGame(){         //La funcion se activa con el boton,restart, y reinicia las estadisticas a su estado inicial
     state = preRun;
     isRestartButtonDisabled = true;
     isStartButtonDisabled = false;
@@ -218,7 +219,7 @@ function restartGame(){         //La funcion se activa con el boton y reinicia l
     Menu.disabled = isMenuButtonDisabled;
 
 };
-function menuGame(){            // La funcion se activa con el boton y lleva al juego al estado de menu
+function menuGame(){            // La funcion se activa con el boton,menu, y lleva al juego al estado de menu
     state = menu;
     isRestartButtonDisabled = true;
     isStartButtonDisabled = false;
@@ -228,7 +229,7 @@ function menuGame(){            // La funcion se activa con el boton y lleva al 
     start.disabled = isStartButtonDisabled;
     Menu.disabled = isMenuButtonDisabled;
 };
-function startGame(){           // La funcion se activa con el boton y lleva al juego al estado start
+function startGame(){           // La funcion se activa con el boton,start, y lleva al juego al estado start
     state = preRun; 
     isRestartButtonDisabled = false;
     isStartButtonDisabled = true;
@@ -265,6 +266,8 @@ function checkGameOver(notes,canvas){   // chequea cuando el juego debe entrar e
         start.disabled = true;    
         Menu.disabled = false;    
     }
+        
+
 }
 };
 
@@ -275,6 +278,7 @@ function updateGameArea(){              // genera el bucle que hace funcionar al
                 restart.disabled = false; 
                 start.disabled = true;    
                 Menu.disabled = false; 
+                drawbackground(ctx);
                 drawplayer();
                 movePlayerPosition(player,canvas);
                 drawNotes(notes, ctx);
@@ -289,7 +293,6 @@ function updateGameArea(){              // genera el bucle que hace funcionar al
         case gameOver :
             if ((isGameOver == true) && (isGamePaused == true)){
             if ((gameOver1 == 0)) {
-            drawbackground();
             drawGameOverScreen(ctx);
             drawScore();
             gameOver1 += 1;
@@ -310,7 +313,7 @@ function updateGameArea(){              // genera el bucle que hace funcionar al
             isRestartButtonDisabled = true;
             isStartButtonDisabled = false;
             isMenuButtonDisabled = true;
-            drawbackground();
+            drawbackground(ctx);
             drawMenuScreen(ctx);
             requestAnimationFrame(updateGameArea);
             break;

@@ -1,17 +1,18 @@
 export const keys = {};
-let limitTop = 0;
+
+let limitTop = 0;   //Limites del juego
 let limitUnder = 0;
 let limitLeft = 0;
 let limitRight = 0
 
-window.addEventListener ("keydown", function(e) {
+window.addEventListener ("keydown", function(e) {       
     keys[e.key] = true;
 });
 window.addEventListener ("keyup", function(e) {
     keys[e.key] = false
 });
 
-export function movePlayerPosition (player,canvas) {
+export function movePlayerPosition (player,canvas) {       //Movimiento del player en teclado.
     // console.log("tamañoAlto"+canvasHeight)
     // console.log("tamañoAncho"+canvasWidth)
     limitTop = 0;

@@ -1,4 +1,4 @@
-class Player {
+class Player {                      // Clase para construir al player
     constructor(x, y, width, height) {
         this.x = x;
         this.y = y;
