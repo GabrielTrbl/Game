@@ -85,7 +85,7 @@ function drawGameOverScreen(ctx){   // dibuja Game Over en la pantalla
 function drawMenuScreen(ctx){       // dibuja la pantalla de menu
     ctx.font = "50px Arial";
     ctx.fillStyle = "#6F0606";
-    ctx.fillText("Atrapa la musica",canvas.width * 0.13 ,canvas.height*0.3);
+    ctx.fillText("Catch the Music",canvas.width * 0.13 ,canvas.height*0.3);
     ctx.fillText("Press Start",canvas.width * 0.26,canvas.height*0.5);
 };
 
@@ -123,7 +123,7 @@ function drawNotes(notes, ctx) {        // dibuja las notas.
 function drawScore (){          // dibuja el puntaje obtenido
     ctx.font = "24px Arial";
     ctx.fillStyle = "white";
-    ctx.fillText("Notas atrapadas: " + score, 10,30);
+    ctx.fillText("Notes Catch:" + score, 10,30);
 };
 
 function spawnNote() {      // genera una nota y la agrega al arreglo
