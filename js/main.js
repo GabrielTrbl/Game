@@ -123,7 +123,7 @@ function drawNotes(notes, ctx) {        // dibuja las notas.
 function drawScore (){          // dibuja el puntaje obtenido
     ctx.font = "24px Arial";
     ctx.fillStyle = "white";
-    ctx.fillText("Notes Catch:" + score, 10,30);
+    ctx.fillText("Trapped Notes:" + score, 10,30);
 };
 
 function spawnNote() {      // genera una nota y la agrega al arreglo
