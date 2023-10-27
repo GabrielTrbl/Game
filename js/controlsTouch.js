@@ -10,8 +10,8 @@ export function touchStart(e,player){       //Detecta el inicio del evento touch
     const touch = e.touches[0];
     // console.log(canvasLeft)
     // console.log(canvasTop)
-    realTouchX = touch.pageX * scaleHorizont ;
-    realTouchY = touch.pageY * scaleVertical;
+    // realTouchX = touch.pageX * scaleHorizont ;
+    // realTouchY = touch.pageY * scaleVertical;
     // console.log("Xtouch"+realTouchX)
     // console.log("Ytouch"+realTouchY)
     realTouchX = (touch.pageX - canvasLeft)*scaleHorizont;      //Ajusta las coordenadas del touchScreen en base al escalado de la pantalla
@@ -22,8 +22,10 @@ export function touchStart(e,player){       //Detecta el inicio del evento touch
     
     if (isTouchInPlayer(realTouchX,realTouchY,player) == true) {
         isDragging = true
-        istouch_X = realTouchX - player.x - player.width / 2  ;
-        istouch_Y = realTouchY  - player.y - player.height / 2 ;
+        istouch_X = realTouchX - player.x - player.width/2   ;
+        istouch_Y = realTouchY  - player.y - player.height/2 ;
+        // console.log("X"+ istouch_X)
+        // console.log("Y"+ istouch_Y)
         // console.log(istouch_X);
         // console.log(istouch_Y);
         // console.log(isDragging);   
@@ -34,8 +36,10 @@ export function touchStart(e,player){       //Detecta el inicio del evento touch
 export function touchMove(e,player,canvas){     // reaciona al movimiento del touch, siempre que este se mantenga pulsado.
     if (isDragging == true) {
     const touch = e.touches[0];    
-    const newX = touch.pageX - istouch_X;
-    const newY = touch.pageY - istouch_Y;
+    const newX = ((touch.pageX - canvasLeft)*scaleHorizont) - istouch_X;
+    const newY = ((touch.pageY - canvasTop)*scaleVertical) - istouch_Y;
+    // console.log("N.X"+newX)
+    // console.log("N.Y"+ newY)
 
     player.x = Math.max(0,Math.min(newX,canvas.width - player.width));
     player.y = Math.max(0,Math.min(newY,canvas.height - player.height));
@@ -46,7 +50,7 @@ export function touchMove(e,player,canvas){     // reaciona al movimiento del to
 
 export function touchEnd(){             // Detecta el final del evento touch en la pantalla
     isDragging = false;
-    console.log(isDragging);
+    // console.log(isDragging);
 
 }
 
